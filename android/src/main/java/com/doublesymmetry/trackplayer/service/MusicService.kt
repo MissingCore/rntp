@@ -8,7 +8,9 @@ import android.net.Uri
 import android.os.Binder
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
 import android.view.KeyEvent
 import androidx.annotation.MainThread
@@ -727,6 +729,7 @@ class MusicService : HeadlessJsMediaService() {
                 player.pause()
             }
             AppKilledPlaybackBehavior.STOP_PLAYBACK_AND_REMOVE_NOTIFICATION -> {
+                emit(MusicEvents.SERVICE_KILLED)
                 Timber.d("Killing service - appKilledPlaybackBehavior = $appKilledPlaybackBehavior")
                 mediaSession.release()
                 player.clear()
@@ -735,16 +738,19 @@ class MusicService : HeadlessJsMediaService() {
                 // registers the service being restarted?
                 player.destroy()
                 scope.cancel()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     stopForeground(STOP_FOREGROUND_REMOVE)
-                } else {
+                  } else {
                     @Suppress("DEPRECATION")
                     stopForeground(true)
-                }
-                onDestroy()
-                // https://github.com/androidx/media/issues/27#issuecomment-1456042326
-                stopSelf()
-                exitProcess(0)
+                  }
+                  onDestroy()
+                  // https://github.com/androidx/media/issues/27#issuecomment-1456042326
+                  stopSelf()
+                  exitProcess(0)
+                }, 350L)
             }
 
             else -> {}

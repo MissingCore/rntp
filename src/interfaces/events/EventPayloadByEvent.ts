@@ -26,6 +26,7 @@ import type { RemoteSkipEvent } from './RemoteSkipEvent';
 
 export type EventPayloadByEvent = {
   [Event.PlayerError]: PlayerErrorEvent;
+  [Event.ServiceKilled]: never;
   [Event.PlaybackState]: PlaybackState;
   [Event.PlaybackError]: PlaybackErrorEvent;
   [Event.PlaybackQueueEnded]: PlaybackQueueEndedEvent;
