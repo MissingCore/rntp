@@ -169,6 +169,20 @@ class MusicService : HeadlessJsMediaService() {
         onStartCommandIntentValid = intent != null
         Timber.d("onStartCommand: ${intent?.action}, ${intent?.`package`}")
 
+        // For some reason, when using the "NEXT" & "PREVIOUS" actions, `onStartCommand` receives an
+        // intent with `androidx.media3.session.CUSTOM_NOTIFICATION_ACTION`. Looking further, `intent?.extras`
+        // would contain the following instead of what we're expecting:
+        //    Key: androidx.media3.session.EXTRAS_KEY_CUSTOM_NOTIFICATION_ACTION
+        //    Value: NEXT (java.lang.String)
+        if (intent?.action == CUSTOM_NOTIFICATION_ACTION) {
+            val customAction = intent.getStringExtra(EXTRAS_KEY_CUSTOM_NOTIFICATION_ACTION)
+            when (customAction) {
+                CustomCommandButton.NEXT.customAction -> emit(MusicEvents.BUTTON_SKIP_NEXT)
+                CustomCommandButton.PREVIOUS.customAction -> emit(MusicEvents.BUTTON_SKIP_PREVIOUS)
+                else -> Timber.d("Unknown custom action: $customAction")
+            }
+        }
+
         val isOnePlus = Build.MANUFACTURER.equals("OnePlus", ignoreCase = true) && Build.BRAND.equals("OnePlus", ignoreCase = true)
 
         // Events are triggered by `onMediaKeyEvent` for OxygenOS 14 or when older than Android 13
@@ -824,13 +838,6 @@ class MusicService : HeadlessJsMediaService() {
             intent?.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT)
         }
 
-        // For some reason, when using the "NEXT" & "PREVIOUS" actions, `onStartCommand` receives an
-        // intent with `androidx.media3.session.CUSTOM_NOTIFICATION_ACTION`. Looking further, `intent?.extras`
-        // would contain the following instead of what we're expecting:
-        //    Key: androidx.media3.session.EXTRAS_KEY_CUSTOM_NOTIFICATION_ACTION
-        //    Value: NEXT (java.lang.String)
-        val customNotificationAction = intent?.getStringExtra("androidx.media3.session.EXTRAS_KEY_CUSTOM_NOTIFICATION_ACTION")
-
         if (keyEvent?.action == KeyEvent.ACTION_DOWN) {
             return when (keyEvent.keyCode) {
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
@@ -870,20 +877,6 @@ class MusicService : HeadlessJsMediaService() {
 
                 KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_SKIP_BACKWARD, KeyEvent.KEYCODE_MEDIA_STEP_BACKWARD -> {
                     emit(MusicEvents.BUTTON_JUMP_BACKWARD)
-                    true
-                }
-
-                else -> null
-            }
-        } else if (customNotificationAction != null) {
-            return when (customNotificationAction) {
-                "NEXT" -> {
-                    emit(MusicEvents.BUTTON_SKIP_NEXT)
-                    true
-                }
-
-                "PREVIOUS" -> {
-                    emit(MusicEvents.BUTTON_SKIP_PREVIOUS)
                     true
                 }
 
@@ -1046,6 +1039,10 @@ class MusicService : HeadlessJsMediaService() {
         const val ANDROID_OPTIONS_KEY = "android"
 
         const val CUSTOM_ACTIONS_KEY = "customActions"
+
+        // Intent emitted by Media3 for custom actions.
+        const val CUSTOM_NOTIFICATION_ACTION = "androidx.media3.session.CUSTOM_NOTIFICATION_ACTION"
+        const val EXTRAS_KEY_CUSTOM_NOTIFICATION_ACTION = "androidx.media3.session.EXTRAS_KEY_CUSTOM_NOTIFICATION_ACTION"
 
         const val APP_KILLED_PLAYBACK_BEHAVIOR_KEY = "appKilledPlaybackBehavior"
         const val AUDIO_OFFLOAD_KEY = "audioOffload"
