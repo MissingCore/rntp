@@ -815,6 +815,13 @@ class MusicService : HeadlessJsMediaService() {
             intent?.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT)
         }
 
+        // For some reason, when using the "NEXT" & "PREVIOUS" actions, `onStartCommand` receives an
+        // intent with `androidx.media3.session.CUSTOM_NOTIFICATION_ACTION`. Looking further, `intent?.extras`
+        // would contain the following instead of what we're expecting:
+        //    Key: androidx.media3.session.EXTRAS_KEY_CUSTOM_NOTIFICATION_ACTION
+        //    Value: NEXT (java.lang.String)
+        val customNotificationAction = intent?.getStringExtra("androidx.media3.session.EXTRAS_KEY_CUSTOM_NOTIFICATION_ACTION")
+
         if (keyEvent?.action == KeyEvent.ACTION_DOWN) {
             return when (keyEvent.keyCode) {
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
@@ -854,6 +861,20 @@ class MusicService : HeadlessJsMediaService() {
 
                 KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_SKIP_BACKWARD, KeyEvent.KEYCODE_MEDIA_STEP_BACKWARD -> {
                     emit(MusicEvents.BUTTON_JUMP_BACKWARD)
+                    true
+                }
+
+                else -> null
+            }
+        } else if (customNotificationAction != null) {
+            return when (customNotificationAction) {
+                "NEXT" -> {
+                    emit(MusicEvents.BUTTON_SKIP_NEXT)
+                    true
+                }
+
+                "PREVIOUS" -> {
+                    emit(MusicEvents.BUTTON_SKIP_PREVIOUS)
                     true
                 }
 
