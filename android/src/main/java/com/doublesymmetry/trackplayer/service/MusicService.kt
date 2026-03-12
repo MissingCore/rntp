@@ -15,7 +15,6 @@ import android.provider.Settings
 import android.view.KeyEvent
 import androidx.annotation.MainThread
 import androidx.annotation.OptIn
-import androidx.media.utils.MediaConstants
 import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -228,7 +227,6 @@ class MusicService : HeadlessJsMediaService() {
             ),
             cacheSizeKb = playerOptions?.getDouble(MAX_CACHE_SIZE_KEY)?.toLong() ?: 0,
             handleAudioBecomingNoisy = playerOptions?.getBoolean(HANDLE_NOISY, true) ?: true,
-            handleAudioFocus = playerOptions?.getBoolean(AUTO_HANDLE_INTERRUPTIONS) ?: true,
             interceptPlayerActionsTriggeredExternally = true,
             skipSilence = playerOptions?.getBoolean(SKIP_SILENCE) ?: false,
             wakeMode = playerOptions?.getInt(WAKE_MODE, 0) ?: 0
@@ -261,8 +259,6 @@ class MusicService : HeadlessJsMediaService() {
         BundleUtils.getIntOrNull(androidOptions, STOP_FOREGROUND_GRACE_PERIOD_KEY)
             ?.let { stopForegroundGracePeriod = it }
 
-        player.alwaysPauseOnInterruption =
-            androidOptions?.getBoolean(PAUSE_ON_INTERRUPTION_KEY) ?: false
         player.shuffleMode = androidOptions?.getBoolean(SHUFFLE_KEY) ?: false
 
         // setup progress update events if configured
@@ -1048,9 +1044,7 @@ class MusicService : HeadlessJsMediaService() {
         const val AUDIO_OFFLOAD_KEY = "audioOffload"
         const val SHUFFLE_KEY = "shuffle"
         const val STOP_FOREGROUND_GRACE_PERIOD_KEY = "stopForegroundGracePeriod"
-        const val PAUSE_ON_INTERRUPTION_KEY = "alwaysPauseOnInterruption"
         const val AUTO_UPDATE_METADATA = "autoUpdateMetadata"
-        const val AUTO_HANDLE_INTERRUPTIONS = "autoHandleInterruptions"
         const val ANDROID_AUDIO_CONTENT_TYPE = "androidAudioContentType"
         const val IS_FOCUS_LOSS_PERMANENT_KEY = "permanent"
         const val IS_PAUSED_KEY = "paused"

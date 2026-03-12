@@ -16,9 +16,7 @@ const setupPlayer = async (
 
 export const SetupService = async () => {
   try {
-    await setupPlayer({
-      autoHandleInterruptions: true,
-    });
+    await setupPlayer({});
     await TrackPlayer.updateOptions({
       android: {
         appKilledPlaybackBehavior: DefaultAudioServiceBehaviour,

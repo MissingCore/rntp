@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.media.RatingCompat
 import com.doublesymmetry.trackplayer.R
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper
 import androidx.media3.common.Rating
@@ -12,6 +11,7 @@ import androidx.media3.common.HeartRating
 import androidx.media3.common.ThumbRating
 import androidx.media3.common.StarRating
 import androidx.media3.common.PercentageRating
+import androidx.media3.session.legacy.RatingCompat
 
 /**
  * @author Milen Pivchev @mpivchev

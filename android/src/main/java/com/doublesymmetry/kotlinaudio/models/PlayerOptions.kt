@@ -11,8 +11,6 @@ data class PlayerOptions(
     val wakeMode: Int = 0,
     val handleAudioBecomingNoisy: Boolean = true,
     val alwaysShowNext: Boolean = true,
-    val handleAudioFocus: Boolean = true,
-    var alwaysPauseOnInterruption: Boolean = true,
     var repeatMode: RepeatMode = RepeatMode.ALL,
     val bufferOptions: BufferOptions = BufferOptions(null, null, null, null),
     val parseEmbeddedArtwork: Boolean = false,

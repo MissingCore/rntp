@@ -8,10 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.net.Uri
-import android.support.v4.media.RatingCompat
 import androidx.media3.common.MediaItem
-import androidx.media.utils.MediaConstants
 import androidx.media3.common.MediaMetadata
+import androidx.media3.session.legacy.RatingCompat
 import com.doublesymmetry.kotlinaudio.models.Capability
 import com.doublesymmetry.kotlinaudio.models.RepeatMode
 import com.doublesymmetry.trackplayer.model.State

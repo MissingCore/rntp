@@ -21,10 +21,6 @@ data class PlayerConfig(
     val handleAudioBecomingNoisy: Boolean = false,
 
     /**
-     * Whether audio focus should be managed automatically. See https://medium.com/google-exoplayer/easy-audio-focus-with-exoplayer-a2dcbbe4640e
-     */
-    val handleAudioFocus: Boolean = false,
-    /**
      * The audio content type.
      */
     val audioContentType: AudioContentType = AudioContentType.MUSIC,

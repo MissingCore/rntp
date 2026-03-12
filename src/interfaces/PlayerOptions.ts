@@ -88,9 +88,4 @@ export interface PlayerOptions {
    * Defaults to `true`.
    */
   autoUpdateMetadata?: boolean;
-  /**
-   * Indicates whether the player should automatically handle audio interruptions.
-   * Defaults to `false`.
-   */
-  autoHandleInterruptions?: boolean;
 }
