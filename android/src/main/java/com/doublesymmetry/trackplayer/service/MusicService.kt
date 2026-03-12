@@ -569,16 +569,6 @@ class MusicService : HeadlessJsMediaService() {
         }
 
         scope.launch {
-            event.onAudioFocusChanged.collect {
-                Bundle().apply {
-                    putBoolean(IS_FOCUS_LOSS_PERMANENT_KEY, it.isFocusLostPermanently)
-                    putBoolean(IS_PAUSED_KEY, it.isPaused)
-                    emit(MusicEvents.BUTTON_DUCK, this)
-                }
-            }
-        }
-
-        scope.launch {
             event.onPlayerActionTriggeredExternally.collect {
                 when (it) {
                     is MediaSessionCallback.RATING -> {
@@ -1046,8 +1036,6 @@ class MusicService : HeadlessJsMediaService() {
         const val STOP_FOREGROUND_GRACE_PERIOD_KEY = "stopForegroundGracePeriod"
         const val AUTO_UPDATE_METADATA = "autoUpdateMetadata"
         const val ANDROID_AUDIO_CONTENT_TYPE = "androidAudioContentType"
-        const val IS_FOCUS_LOSS_PERMANENT_KEY = "permanent"
-        const val IS_PAUSED_KEY = "paused"
 
         const val HANDLE_NOISY = "androidHandleAudioBecomingNoisy"
         const val ALWAYS_SHOW_NEXT = "androidAlwaysShowNext"

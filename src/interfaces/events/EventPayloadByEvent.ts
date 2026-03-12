@@ -15,7 +15,6 @@ import type { PlaybackProgressUpdatedEvent } from './PlaybackProgressUpdatedEven
 import type { PlaybackQueueEndedEvent } from './PlaybackQueueEndedEvent';
 import type { PlaybackResumeEvent } from './PlaybackResumeEvent';
 import type { PlayerErrorEvent } from './PlayerErrorEvent';
-import type { RemoteDuckEvent } from './RemoteDuckEvent';
 import type { RemoteJumpBackwardEvent } from './RemoteJumpBackwardEvent';
 import type { RemoteJumpForwardEvent } from './RemoteJumpForwardEvent';
 import type { RemotePlayIdEvent } from './RemotePlayIdEvent';
@@ -46,7 +45,6 @@ export type EventPayloadByEvent = {
   [Event.RemoteJumpBackward]: RemoteJumpBackwardEvent;
   [Event.RemoteSeek]: RemoteSeekEvent;
   [Event.RemoteSetRating]: RemoteSetRatingEvent;
-  [Event.RemoteDuck]: RemoteDuckEvent;
   [Event.RemoteLike]: never;
   [Event.RemoteDislike]: never;
   [Event.RemoteBookmark]: never;

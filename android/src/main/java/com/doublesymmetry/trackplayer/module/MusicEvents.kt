@@ -33,7 +33,6 @@ class MusicEvents(private val reactContext: ReactContext) : BroadcastReceiver() 
         const val BUTTON_SET_RATING = "remote-set-rating"
         const val BUTTON_JUMP_FORWARD = "remote-jump-forward"
         const val BUTTON_JUMP_BACKWARD = "remote-jump-backward"
-        const val BUTTON_DUCK = "remote-duck"
         const val BUTTON_BROWSE = "remote-browse"
 
         // Playback Events
