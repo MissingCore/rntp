@@ -754,7 +754,7 @@ class MusicService : HeadlessJsMediaService() {
                 player.destroy()
 
                 scope.launch {
-                    delay(500)
+                    delay(750)
                     stopForeground(STOP_FOREGROUND_REMOVE)
                     onDestroy()
                     // https://github.com/androidx/media/issues/27#issuecomment-1456042326
