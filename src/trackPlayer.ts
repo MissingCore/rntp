@@ -70,6 +70,13 @@ export function registerPlaybackService(factory: () => ServiceHandler) {
   }
 }
 
+/**
+ * Register the callback passed to `registerPlaybackService`.
+ */
+export async function registerEvents(): Promise<void> {
+  return TrackPlayer.registerEvents();
+}
+
 export function addEventListener<T extends Event>(
   event: T,
   listener: EventPayloadByEvent[T] extends never

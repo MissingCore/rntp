@@ -334,6 +334,18 @@ class MusicService : HeadlessJsMediaService() {
         }
     }
 
+    /**
+     * For some reason, the callback passed to `TrackPlayer.registerPlaybackService()` doesn't get called
+     * until we play a track. This leads to the first set of events to not fire, most notably, the
+     * `PlaybackActiveTrackChanged` event.
+     *
+     * Calling `onStartCommand` will call `getTaskConfig`, which registers the event passed to
+     * `TrackPlayer.registerPlaybackService()`.
+     */
+    fun registerEvents() {
+        onStartCommand(null, 0, 0)
+    }
+
     @MainThread
     private fun progressUpdateEventFlow(interval: Double) = flow {
         while (true) {

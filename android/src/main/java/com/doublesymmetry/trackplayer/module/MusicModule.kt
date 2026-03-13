@@ -240,6 +240,12 @@ class MusicModule(reactContext: ReactApplicationContext) : NativeTrackPlayerSpec
         callback.resolve(null)
     }
 
+    override fun registerEvents(callback: Promise) = launchInScope {
+        if (verifyServiceBoundOrReject(callback)) return@launchInScope
+        musicService.registerEvents()
+        callback.resolve(null)
+    }
+
     // override fun add(data: Double, y: Double): Double {
     //   return 1.0
     // }

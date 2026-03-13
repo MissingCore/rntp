@@ -5,6 +5,7 @@ export interface Spec extends TurboModule {
   // init and config
   setupPlayer(options: UnsafeObject): Promise<void>;
   updateOptions(options: UnsafeObject): Promise<void>;
+  registerEvents(): Promise<void>;
 
   // player api
   load(track: UnsafeObject): Promise<number | void>;
