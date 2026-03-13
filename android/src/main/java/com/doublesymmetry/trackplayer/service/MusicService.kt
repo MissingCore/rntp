@@ -8,9 +8,7 @@ import android.net.Uri
 import android.os.Binder
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.provider.Settings
 import android.view.KeyEvent
 import androidx.annotation.MainThread
@@ -19,8 +17,6 @@ import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.CacheBitmapLoader
-import androidx.media3.session.LibraryResult
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Rating
 import androidx.media3.common.util.BitmapLoader
 import androidx.media3.exoplayer.ExoPlayer
@@ -47,8 +43,6 @@ import com.doublesymmetry.trackplayer.utils.BundleUtils.setRating
 import com.doublesymmetry.trackplayer.utils.CoilBitmapLoader
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.jstasks.HeadlessJsTaskConfig
-import com.google.common.collect.ImmutableList
-import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
@@ -746,20 +740,15 @@ class MusicService : HeadlessJsMediaService() {
                 // HACK: the service first stops, then starts, then call onTaskRemove. Why system
                 // registers the service being restarted?
                 player.destroy()
-                scope.cancel()
 
-                Handler(Looper.getMainLooper()).postDelayed({
-                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                scope.launch {
+                    delay(500)
                     stopForeground(STOP_FOREGROUND_REMOVE)
-                  } else {
-                    @Suppress("DEPRECATION")
-                    stopForeground(true)
-                  }
-                  onDestroy()
-                  // https://github.com/androidx/media/issues/27#issuecomment-1456042326
-                  stopSelf()
-                  exitProcess(0)
-                }, 350L)
+                    onDestroy()
+                    // https://github.com/androidx/media/issues/27#issuecomment-1456042326
+                    stopSelf()
+                    exitProcess(0)
+                }
             }
 
             else -> {}
@@ -807,6 +796,7 @@ class MusicService : HeadlessJsMediaService() {
 
     @MainThread
     override fun onDestroy() {
+        scope.cancel()
         if (::player.isInitialized) {
             Timber.d("Releasing media session and destroying player")
             mediaSession.release()
