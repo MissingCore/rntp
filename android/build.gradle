@@ -81,7 +81,7 @@ dependencies {
 
   implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
 
-  def media3_version = "1.9.1-MissingCore.2"
+  def media3_version = "1.9.3-MissingCore.1"
 
   implementation("com.github.MissingCore.media:media3-exoplayer:$media3_version")
   implementation("com.github.MissingCore.media:media3-session:$media3_version")
